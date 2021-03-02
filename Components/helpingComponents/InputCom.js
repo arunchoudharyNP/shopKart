@@ -70,6 +70,7 @@ const InputCom = (props) => {
               icon ? { paddingLeft: 40 } : null,
               inputStyle,
             ]}
+            
             {...restProps}
           ></TextInput>
           {secure && renderEyeButton()}
