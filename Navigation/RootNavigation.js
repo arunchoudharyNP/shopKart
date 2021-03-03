@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Text, View } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -8,11 +8,14 @@ import { useDispatch } from "react-redux";
 import LoginScreen from "../Screens/beforeAuth/LoginScreen";
 import SignUpScreen from "../Screens/beforeAuth/SignUpScreen";
 import DashboardScreen from "../Screens/afterAuth/DashboardScreen";
+import Verify from "../Screens/Verify";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const RootNavigation = (props) => {
   const [isAuth, setIsAuth] = useState(false);
   const [data, setdata] = useState("");
+
+  const navigationRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -34,7 +37,7 @@ const RootNavigation = (props) => {
     getAuthData().then((data) => {
       setdata(data);
     });
-  }, [dispatch]);
+  }, [dispatch, navigationRef]);
 
   const homeStack = () => {
     return (
@@ -52,21 +55,35 @@ const RootNavigation = (props) => {
       >
         <RootStack.Screen name="login" component={LoginScreen} />
         <RootStack.Screen name="signUp" component={SignUpScreen} />
+        <RootStack.Screen name="Verify" component={Verify} />
       </RootStack.Navigator>
     );
   };
 
+  navigationRef;
   return (
-    <NavigationContainer>
-      {!isAuth ? (
+    <NavigationContainer
+      ref={navigationRef}
+      onStateChange={(state) => {
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+        console.log(".............." + currentRouteName);
+        if (currentRouteName === "Verify") {
+          setIsAuth(false);
+          // getUpdatedState();
+          getAuthData();
+        }
+      }}
+    >
+      {!isAuth && !data ? (
         AuthStack()
       ) : (
         <DrawerNav.Navigator>
           <DrawerNav.Screen
             name="home"
             component={homeStack}
-            initialParams={{ UID: data.token }}
+            initialParams={{ UID: data && data.token }}
           />
+          <DrawerNav.Screen name="Verify" component={Verify} />
         </DrawerNav.Navigator>
       )}
     </NavigationContainer>

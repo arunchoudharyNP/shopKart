@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Keyboard } from "react-native";
 
 import { useDispatch } from "react-redux";
 
@@ -35,7 +35,10 @@ const SignUpScreen = (props) => {
           color={"#093F40"}
           padding={10}
           round
-          onPress={() => dispatch(AuthActions.signup(Email,Password))}
+          onPress={() => {
+            Keyboard.dismiss();
+            dispatch(AuthActions.signup(props.navigation, Email, Password));
+          }}
         >
           <Text style={{ color: "white" }}>SignUp</Text>
         </ButtonCom>

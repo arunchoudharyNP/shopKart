@@ -1,18 +1,48 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React,{useState} from "react";
+import { Text, View, StyleSheet,Keyboard } from "react-native";
 
 import InputCom from "../../Components/helpingComponents/InputCom";
 import ButtonCom from "../../Components/helpingComponents/ButtonCom";
+import { useDispatch } from "react-redux";
+import * as AuthActions from "../../Store/Actions/auth";
 
 const LoginSCreen = (props) => {
+  const [Email, setEmail] = useState("");
+  const [password, setpassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  const loginHandler = () => {
+    dispatch(AuthActions.login(props.navigation,Email,password));
+  };
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 36, fontWeight: "700" }}> Login</Text>
       <View style={styles.inputContainer}>
-        <InputCom title={"Email"} borderBottom />
-        <InputCom title={"Password"} borderBottom secure />
+        <InputCom
+          title={"Email"}
+          borderBottom
+          value={Email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <InputCom
+          title={"Password"}
+          borderBottom
+          secure
+          value={password}
+          onChangeText={(text) => setpassword(text)}
+        />
 
-        <ButtonCom color={"#093F40"} padding={10} round>
+        <ButtonCom
+          color={"#093F40"}
+          padding={10}
+          round
+          onPress={() => {
+            Keyboard.dismiss();
+            loginHandler();
+          }}
+        >
           <Text style={{ color: "white" }}>Login</Text>
         </ButtonCom>
 
