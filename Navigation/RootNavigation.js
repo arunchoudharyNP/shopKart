@@ -69,6 +69,7 @@ const RootNavigation = (props) => {
         console.log(".............." + currentRouteName);
         if (currentRouteName === "Verify") {
           setIsAuth(false);
+          setdata("");
           // getUpdatedState();
           getAuthData();
         }
@@ -81,7 +82,7 @@ const RootNavigation = (props) => {
           <DrawerNav.Screen
             name="home"
             component={homeStack}
-            initialParams={{ UID: data && data.token }}
+            initialParams={{ name: data.name , picture: data.picture, uid: data.token }}
           />
           <DrawerNav.Screen name="Verify" component={Verify} />
         </DrawerNav.Navigator>

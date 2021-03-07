@@ -21,7 +21,10 @@ const handleResourcesAsync = async () => {
   // we're caching all the images
   // for better performance on the app
 
-  const imageAssets = cacheImages([]);
+  const imageAssets = cacheImages([
+    require("../../assets/Icon/facebook.jpg"),
+    require("../../assets/Icon/google.jpg"),
+  ]);
 
   const fontAssets = cacheFonts([
     // { Caveat: require("./assets/fonts/static/Caveat-Medium.ttf") },

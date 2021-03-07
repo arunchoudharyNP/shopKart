@@ -15,9 +15,15 @@ const alert = (message) => {
   ]);
 };
 
-export const authenticate = (token, userId) => {
+export const authenticate = (token) => {
   return (dispatch) => {
-    dispatch({ type: AUTHENTICATE, token, userId });
+    dispatch({ type: AUTHENTICATE, token, name:"", picture:"" });
+  };
+};
+
+export const authenticateUser = (token, _, name, picture) => {
+  return (dispatch) => {
+    dispatch({ type: AUTHENTICATE, token, name, picture });
   };
 };
 
@@ -101,6 +107,78 @@ export const login = (navigation, email, password) => {
   };
 };
 
+export const loginFB = (navigation, name, picture, UID, isNewUser) => {
+  return async (dispatch) => {
+    try {
+      if (true) {
+        const response = await fetch(
+          `https://madproject-64d49-default-rtdb.firebaseio.com/Users/${UID}.json`,
+          {
+            method: "Patch",
+
+            headers: {
+              "Content-Type": "application/json",
+            },
+
+            body: JSON.stringify({
+              name: name,
+              pictureUrl: picture,
+              UID: UID,
+            }),
+          }
+        );
+        dispatch(authenticateUser(UID, UID, name, picture));
+        saveDataToStorage(navigation, UID, UID, name, picture);
+      }
+      // dispatch(authenticate(UID, UID,name,picture));
+      // saveDataToStorage(UID,UID,name,picture);
+
+      // const resData = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const loginGoogle = (name, picture, UID, isNewUser) => {
+  return async (dispatch) => {
+    try {
+      if (true) {
+        const response = await fetch(
+          `https://shopout-ver-1.firebaseio.com/Shoppers/${UID}.json`,
+          {
+            method: "Patch",
+
+            headers: {
+              "Content-Type": "application/json",
+            },
+
+            body: JSON.stringify({
+              name: name,
+              pictureUrl: picture,
+              UID: UID,
+              location: {
+                latitude: "",
+                longitude: "",
+                address: "",
+                locality: "Janakpuri",
+              },
+            }),
+          }
+        );
+
+        dispatch(authenticate(UID, UID, name, picture));
+        saveDataToStorage(UID, UID, name, picture);
+      }
+      // dispatch(authenticate(UID, UID,name,picture));
+      // saveDataToStorage(UID, UID,name,picture);
+      // const resData = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const logout = (navigation) => {
   const wait = AsyncStorage.removeItem("userData");
 
@@ -111,12 +189,14 @@ export const logout = (navigation) => {
   return { type: LOGOUT };
 };
 
-const saveDataToStorage = async (navigation, token, userId) => {
+const saveDataToStorage = async (navigation, token, userId, name, picture) => {
   await AsyncStorage.setItem(
     "userData",
     JSON.stringify({
       token: token,
       userId: userId,
+      name: name,
+      picture: picture,
     })
   );
 

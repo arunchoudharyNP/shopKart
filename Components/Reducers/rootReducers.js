@@ -1,6 +1,6 @@
 
 
-import AuthReducer from "./Store/Reducers/auth";
+import AuthReducer from "../../Store/Reducers/auth";
 import { combineReducers} from "redux";
 
 

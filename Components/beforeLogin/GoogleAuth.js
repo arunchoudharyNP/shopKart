@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import FirebaseConfig from "../../data/firebaseConfig";
-import * as actions from "../../store/actions/authAction";
+// import * as actions from "../../store/actions/auth";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseConfig);

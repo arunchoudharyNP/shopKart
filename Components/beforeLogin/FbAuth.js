@@ -66,7 +66,7 @@ export const FbAuth = (props) => {
 
         // console.log("fireBaseResult====" +JSON.stringify(firebaseResult))
         const isNewUser = firebaseResult.additionalUserInfo.isNewUser;
-        const action = actions.loginFB(name, picture, UID, isNewUser);
+        const action = actions.loginFB(props.navigation,name, picture, UID, isNewUser);
 
         try {
           console.log("loginFB Action dispatch start");
@@ -86,7 +86,7 @@ export const FbAuth = (props) => {
   };
 
   return (
-    <TouchableOpacity {...prop} onPress={authenticate}>
+    <TouchableOpacity {...prop}  onPress={authenticate}>
       {children}
     </TouchableOpacity>
   );
