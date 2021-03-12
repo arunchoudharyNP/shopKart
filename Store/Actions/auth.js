@@ -17,7 +17,7 @@ const alert = (message) => {
 
 export const authenticate = (token) => {
   return (dispatch) => {
-    dispatch({ type: AUTHENTICATE, token, name:"", picture:"" });
+    dispatch({ type: AUTHENTICATE, token, name: "", picture: "" });
   };
 };
 

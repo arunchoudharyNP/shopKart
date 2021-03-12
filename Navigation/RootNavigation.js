@@ -10,6 +10,7 @@ import SignUpScreen from "../Screens/beforeAuth/SignUpScreen";
 import DashboardScreen from "../Screens/afterAuth/DashboardScreen";
 import Verify from "../Screens/Verify";
 import AsyncStorage from "@react-native-community/async-storage";
+import AddProductScreen from "../Screens/afterAuth/AddProductScreen";
 
 const RootNavigation = (props) => {
   const [isAuth, setIsAuth] = useState(false);
@@ -43,6 +44,7 @@ const RootNavigation = (props) => {
     return (
       <HomeStack.Navigator>
         <HomeStack.Screen name={"Home"} component={DashboardScreen} />
+        <HomeStack.Screen name={"AddProductScreen"} component={AddProductScreen} />
       </HomeStack.Navigator>
     );
   };

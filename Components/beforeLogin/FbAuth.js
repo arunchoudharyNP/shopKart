@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import * as Facebook from "expo-facebook";
 import firebase from "firebase";
@@ -6,7 +6,7 @@ import firebase from "firebase";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import { TouchableOpacity, Alert } from "react-native";
+import { TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 
 import FirebaseConfig from "../../data/firebaseConfig";
 import * as actions from "../../Store/Actions/auth";
@@ -18,6 +18,8 @@ if (!firebase.apps.length) {
 }
 
 export const FbAuth = (props) => {
+  const [loader, setloader] = useState(false);
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -32,6 +34,7 @@ export const FbAuth = (props) => {
   };
 
   const signIn = async () => {
+    setloader(true);
     try {
       await Facebook.initializeAsync("297738708199575");
       const {
@@ -66,18 +69,26 @@ export const FbAuth = (props) => {
 
         // console.log("fireBaseResult====" +JSON.stringify(firebaseResult))
         const isNewUser = firebaseResult.additionalUserInfo.isNewUser;
-        const action = actions.loginFB(props.navigation,name, picture, UID, isNewUser);
+        const action = actions.loginFB(
+          props.navigation,
+          name,
+          picture,
+          UID,
+          isNewUser
+        );
 
         try {
           console.log("loginFB Action dispatch start");
           await dispatch(action);
           console.log("loginFB Action dispatched");
           navigation.navigate("Verify");
+          setloader(false);
         } catch (err) {
           console.log(err);
         }
         // Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
       } else {
+        setloader(false);
         Alert.alert("Log in Failed!");
       }
     } catch ({ message }) {
@@ -86,8 +97,8 @@ export const FbAuth = (props) => {
   };
 
   return (
-    <TouchableOpacity {...prop}  onPress={authenticate}>
-      {children}
+    <TouchableOpacity {...prop} onPress={authenticate}>
+      {loader ? <ActivityIndicator size="large" color="black" /> : children}
     </TouchableOpacity>
   );
 };
